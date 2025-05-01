@@ -1,0 +1,202 @@
+.header {
+    width: 100%;
+    height: 4rem;
+    background-color: indigo;
+    position: relative;
+    z-index: 100;
+}
+
+.headerNav {
+    height: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
+
+/* Title styling */
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+    text-align: center;
+}
+
+/* Right section with home button and user info */
+.rightNavSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.homeButton {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.2s;
+}
+
+.homeButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.loginButton {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.2s;
+}
+
+.loginButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* User info styling */
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1rem;
+}
+
+.userGreeting {
+    display: block;
+}
+
+.logoutButton {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: indigo;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+    background-color: #f0f0f0;
+}
+
+/* Hamburger menu styling */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 2rem;
+    height: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+.hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    transition: all 0.3s linear;
+}
+
+.hamburger.active span:first-child {
+    transform: translateY(10px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:last-child {
+    transform: translateY(-10px) rotate(-45deg);
+}
+
+/* Mobile menu styling */
+.mobileMenu {
+    position: fixed;
+    top: 4rem;
+    left: -100%;
+    width: 70%;
+    height: calc(100vh - 4rem);
+    background-color: #4b0082;
+    transition: left 0.3s ease-in-out;
+    z-index: 99;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.mobileMenu.open {
+    left: 0;
+}
+
+.mobileMenuContent {
+    padding: 2rem 1rem;
+}
+
+.mobileNavLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mobileNavLink {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mobileNavLink:hover {
+    opacity: 0.8;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .userGreeting {
+        display: none;
+    }
+    
+    .title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .mobileMenu {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .headerNav {
+        padding: 0 0.5rem;
+    }
+    
+    .rightNavSection {
+        gap: 0.5rem;
+    }
+    
+    .homeButton, .loginButton, .logoutButton {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}

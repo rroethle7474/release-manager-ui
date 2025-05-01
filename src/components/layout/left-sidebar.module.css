@@ -1,0 +1,5 @@
+.sidebar-left {
+    background-color: yellow;
+    flex: 0 0 200px;
+    order: -1; /* Ensures it comes before content on all devices */
+}
