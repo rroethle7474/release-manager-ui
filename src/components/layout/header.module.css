@@ -106,6 +106,21 @@
     background-color: #f0f0f0;
 }
 
+/* Navigation link styling */
+.navLink {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.2s;
+    margin-right: 0.5rem;
+}
+
+.navLink:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
 /* Hamburger menu styling */
 .hamburger {
     display: flex; /* Changed from none to flex, conditional rendering handles visibility */

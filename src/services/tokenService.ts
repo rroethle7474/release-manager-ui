@@ -14,6 +14,7 @@ const USER_DATA_KEY = 'auth_user_data';
 export interface UserData {
   userId: string;
   organizationId: string;
+  organizationName: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -34,6 +35,7 @@ export const storeAuthData = (authResponse: AuthResponse): void => {
   const userData: UserData = {
     userId: authResponse.userId,
     organizationId: authResponse.organizationId,
+    organizationName: authResponse.organizationName,
     email: authResponse.email,
     firstName: authResponse.firstName,
     lastName: authResponse.lastName,

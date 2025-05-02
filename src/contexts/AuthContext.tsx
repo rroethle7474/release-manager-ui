@@ -23,12 +23,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check if user is already authenticated using token service
-    console.log("AM I RUNNING");
     const checkAuthStatus = async () => {
       try {
         // Check if token exists and is valid
         const token = getToken();
-        console.log("TOKEN");
         if (token && !isTokenExpired()) {
           // Get user data from token service
           const userData = getUserData();
@@ -87,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         expiration: '',
         userId: '',
         organizationId: '',
+        organizationName: '',
         email: '',
         firstName: '',
         lastName: '',

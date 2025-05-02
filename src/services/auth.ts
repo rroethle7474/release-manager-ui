@@ -11,6 +11,7 @@ export interface AuthResponse {
   expiration: string; // ISO date string
   userId: string; // Guid as string
   organizationId: string; // Guid as string
+  organizationName: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -52,15 +53,16 @@ export const authService = {
       console.log("LOGIN ATTEMPT", email, password)
       console.log("API URL", config.api.baseUrl)
       const response = await api.post<AuthResponse>('/auth/login', { email, password });
-      
+      console.log("LOGIN RESPONSE", response)
+      console.log("LOGIN RESPONSE DATA", response.data)
       // Store the authentication data
-      if (response.token) {
-        storeAuthData(response);
-        return { ...response, success: true };
+      if (response.data.token) {
+        storeAuthData(response.data);
+        return { ...response.data, success: true };
       }
       
       return { 
-        ...response, 
+        ...response.data, 
         success: false, 
         message: 'Invalid response from server' 
       };
@@ -72,6 +74,7 @@ export const authService = {
         expiration: '',
         userId: '',
         organizationId: '',
+        organizationName: '',
         email: '',
         firstName: '',
         lastName: '',
@@ -136,8 +139,8 @@ export const authService = {
     try {
       const response = await api.post<AuthResponse>('/auth/refresh', { refreshToken });
       
-      if (response.token) {
-        storeAuthData(response);
+      if (response.data.token) {
+        storeAuthData(response.data);
         return true;
       }
       

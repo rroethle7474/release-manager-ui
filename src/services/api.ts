@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { getToken, isTokenExpired, getAuthHeader } from './tokenService';
 import config from '../config';
 import emitter from '../events/loadingEvents';
@@ -16,12 +16,15 @@ const api = axios.create({
 
 // Request interceptor
 api.interceptors.request.use(
-  (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> => {
     emitter.emit('loading_start');
     const token = getToken();
     if (token && !isTokenExpired()) {
       if (config.headers) {
-        config.headers.Authorization = getAuthHeader();
+        const authHeader = getAuthHeader();
+        if (authHeader) {
+          config.headers['Authorization'] = authHeader.Authorization;
+        }
       }
     }
     return config;

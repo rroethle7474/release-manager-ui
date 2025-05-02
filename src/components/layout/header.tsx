@@ -62,6 +62,9 @@ export default function Header() {
                             <span className={styles.userGreeting}>
                                 Hello, {user?.firstName || user?.email}!
                             </span>
+                            <Link href="/connect" className={styles.navLink}>
+                                Connect
+                            </Link>
                             <button 
                                 onClick={handleLogout}
                                 className={styles.logoutButton}
@@ -89,6 +92,9 @@ export default function Header() {
                                     </Link>
                                     <Link href="/releases" className={styles.mobileNavLink} onClick={toggleMenu}>
                                         Releases
+                                    </Link>
+                                    <Link href="/connect" className={styles.mobileNavLink} onClick={toggleMenu}>
+                                        Connect
                                     </Link>
                                 </>
                             )}
