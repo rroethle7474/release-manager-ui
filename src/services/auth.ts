@@ -1,5 +1,5 @@
 import config from '@/config';
-import { api } from './api';
+import api from './api';
 import { storeAuthData, clearAuthData, getToken, isTokenExpired, getRefreshToken, getUserData } from './tokenService';
 
 /**

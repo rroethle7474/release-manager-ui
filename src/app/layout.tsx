@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
-import LeftSidebar from "@/components/layout/left-sidebar";
-import RightSidebar from '@/components/layout/right-sidebar';
 import { AuthProvider } from "@/contexts/AuthContext";
+import AppClientLayout from "@/components/layout/AppClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,17 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AuthProvider>
-          <div className="layout">
-            <Header />
-            <div className="content-wrapper">
-              <main className="main-content">
-                {children}
-              </main>
-              <LeftSidebar />
-              <RightSidebar />
-            </div>
-            <Footer />
-          </div>
+          <AppClientLayout>{children}</AppClientLayout>
         </AuthProvider>
       </body>
     </html>

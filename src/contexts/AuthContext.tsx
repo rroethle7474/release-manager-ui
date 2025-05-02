@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authService, AuthResponse } from '@/services/auth';
 import { getUserData, UserData, isTokenExpired, getToken } from '@/services/tokenService';
+import emitter from '@/events/loadingEvents'; // Import the event emitter
 
 interface AuthContextType {
   user: UserData | null;
@@ -44,6 +45,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     checkAuthStatus();
+
+    // Event listeners for loading state
+    const handleLoadingStart = () => setIsLoading(true);
+    const handleLoadingEnd = () => setIsLoading(false);
+
+    emitter.on('loading_start', handleLoadingStart);
+    emitter.on('loading_end', handleLoadingEnd);
+
+    // Cleanup listeners on component unmount
+    return () => {
+      emitter.off('loading_start', handleLoadingStart);
+      emitter.off('loading_end', handleLoadingEnd);
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<AuthResponse> => {

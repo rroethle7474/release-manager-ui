@@ -1,73 +1,48 @@
-import config from '@/config';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getToken, isTokenExpired, getAuthHeader } from './tokenService';
+import config from '../config';
+import emitter from '../events/loadingEvents';
 
 /**
  * Base API service for making HTTP requests
  */
-export const api = {
-  /**
-   * Make a GET request to the API
-   */
-  get: async <T>(endpoint: string): Promise<T> => {
-    // Check if token is expired
-    if (getToken() && isTokenExpired()) {
-      // Token is expired, we should handle refresh here
-      // This could be implemented with a refreshToken function
-      // For now, we'll just throw an error
-      throw new Error('Authentication token expired');
-    }
-
-    // Get auth header if available
-    const authHeader = getAuthHeader();
-    
-    const response = await fetch(`${config.api.baseUrl}${endpoint}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(authHeader || {}),
-      },
-      credentials: 'include', // Include cookies for session management
-    });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-
-    return response.json();
+const api = axios.create({
+  baseURL: config.api.baseUrl,
+  headers: {
+    'Content-Type': 'application/json',
   },
+  withCredentials: true, // Include cookies for session management
+});
 
-  /**
-   * Make a POST request to the API
-   */
-  post: async <T, D = Record<string, unknown>>(endpoint: string, data: D): Promise<T> => {
-    // Check if token is expired (except for auth endpoints)
-    if (!endpoint.includes('/auth/login') && !endpoint.includes('/auth/register') && !endpoint.includes('/auth/refresh') && 
-        getToken() && isTokenExpired()) {
-      // Token is expired, we should handle refresh here
-      // This could be implemented with a refreshToken function
-      // For now, we'll just throw an error
-      throw new Error('Authentication token expired');
+// Request interceptor
+api.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
+    emitter.emit('loading_start');
+    const token = getToken();
+    if (token && !isTokenExpired()) {
+      if (config.headers) {
+        config.headers.Authorization = getAuthHeader();
+      }
     }
-
-    // Get auth header if available and not an auth endpoint that doesn't require authentication
-    const authHeader = !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register') 
-      ? getAuthHeader() 
-      : undefined;
-    
-    const response = await fetch(`${config.api.baseUrl}${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(authHeader || {}),
-      },
-      body: JSON.stringify(data),
-      credentials: 'include', // Include cookies for session management
-    });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-
-    return response.json();
+    return config;
   },
-};
+  (error: AxiosError) => {
+    emitter.emit('loading_end');
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor
+api.interceptors.response.use(
+  (response: AxiosResponse) => {
+    emitter.emit('loading_end');
+    return response;
+  },
+  (error: AxiosError) => {
+    emitter.emit('loading_end');
+    // TODO: Handle specific error codes (e.g., 401 for unauthorized)
+    return Promise.reject(error);
+  }
+);
+
+export default api;

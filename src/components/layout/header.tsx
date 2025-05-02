@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { FaHome } from 'react-icons/fa';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,29 +30,32 @@ export default function Header() {
     return (
         <header className={styles.header}>
             <nav className={styles.headerNav}>
-                {/* Hamburger menu for mobile */}
-                {isMobile && (
-                    <button 
-                        className={`${styles.hamburger} ${isMenuOpen ? styles.active : ''}`} 
-                        onClick={toggleMenu}
-                        aria-label="Toggle menu"
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                )}
+                {/* Left side: Hamburger menu for mobile OR Home icon for desktop */}
+                <div className={styles.leftNavSection}> 
+                    {isMobile ? (
+                        <button 
+                            className={`${styles.hamburger} ${isMenuOpen ? styles.active : ''}`} 
+                            onClick={toggleMenu}
+                            aria-label="Toggle menu"
+                        >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    ) : (
+                        <Link href="/" className={styles.desktopHomeButton} aria-label="Home">
+                            <FaHome size={24} />
+                        </Link>
+                    )}
+                </div>
                 
                 {/* Title - centered */}
                 <div className={styles.titleContainer}>
                     <h1 className={styles.title}>Release Manager</h1>
                 </div>
                 
-                {/* Right side - Home button and user info */}
+                {/* Right side - user info */}
                 <div className={styles.rightNavSection}>
-                    <Link href="/" className={styles.homeButton}>
-                        Home
-                    </Link>
                     
                     {isAuthenticated ? (
                         <div className={styles.userInfo}>
